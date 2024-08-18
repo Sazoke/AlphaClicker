@@ -214,6 +214,7 @@
 
                     <ComboBoxItem>Single</ComboBoxItem>
                     <ComboBoxItem>Double</ComboBoxItem>
+                    <ComboBoxItem>Hold</ComboBoxItem>
                 </ComboBox>
 
                 <RadioButton x:Name="repeatTimesRBtn" Content=" Repeat"

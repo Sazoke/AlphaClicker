@@ -75,6 +75,12 @@ namespace AlphaClicker
 
                 startBtn.IsEnabled = true;
                 stopBtn.IsEnabled = false;
+                if (clickTypeCBOX.Text != "Hold") return;
+                var mouseBtn = mouseBtnCBOX.Text;
+                var customCoordsChecked = (bool)coordsCBtn.IsChecked;
+                var customCoordsX = int.Parse(xBox.Text);
+                var customCoordsY = int.Parse(yBox.Text);
+                WinApi.UpClick(mouseBtn, customCoordsChecked, customCoordsX, customCoordsY);
             }
         }
 
@@ -205,6 +211,7 @@ namespace AlphaClicker
 
             int repeatCount = 0;
             Random rnd = new Random();
+            var longClick = false;
 
             while (true)
             {
@@ -214,7 +221,7 @@ namespace AlphaClicker
                     doClick = stopBtn.IsEnabled;
                 }));
 
-                if (doClick)
+                if (doClick && (clickType != "Hold" || !longClick))
                 {
                     if (repeatTimesChecked)
                     {
@@ -229,15 +236,20 @@ namespace AlphaClicker
                         repeatCount += 1;
                     }
 
-                    if (clickType == "Single")
+                    switch (clickType)
                     {
-                        WinApi.DoClick(mouseBtn, customCoordsChecked, customCoordsX, customCoordsY);
-                    }
-                    else
-                    {
-                        WinApi.DoClick(mouseBtn, customCoordsChecked, customCoordsX, customCoordsY);
-                        Thread.Sleep(300);
-                        WinApi.DoClick(mouseBtn, customCoordsChecked, customCoordsX, customCoordsY);
+                        case "Single":
+                            WinApi.DoClick(mouseBtn, customCoordsChecked, customCoordsX, customCoordsY);
+                            break;
+                        case "Double":
+                            WinApi.DoClick(mouseBtn, customCoordsChecked, customCoordsX, customCoordsY);
+                            Thread.Sleep(300);
+                            WinApi.DoClick(mouseBtn, customCoordsChecked, customCoordsX, customCoordsY);
+                            break;
+                        case "Hold":
+                            WinApi.DoClick(mouseBtn, customCoordsChecked, customCoordsX, customCoordsY, true);
+                            longClick = true;
+                            break;
                     }
 
                     Dispatcher.Invoke((Action)(() =>

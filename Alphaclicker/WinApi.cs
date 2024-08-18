@@ -39,21 +39,49 @@ namespace AlphaClicker
             return lpPoint;
         }
 
-        public static void DoClick(string button, bool useCustomCoords, int X, int Y)
+        public static void DoClick(string button, bool useCustomCoords, int X, int Y, bool @long = false)
         {
             if (useCustomCoords) { SetCursorPos(X, Y); }
+
+            var @event = (uint)MOUSEEVENTF.LEFTDOWN;
             switch (button)
             {
                 case "Left":
-                    mouse_event((uint)MOUSEEVENTF.LEFTDOWN | (uint)MOUSEEVENTF.LEFTUP, 0, 0, 0, 0);
+                    @event = (uint)MOUSEEVENTF.LEFTDOWN;
                     break;
                 case "Right":
-                    mouse_event((uint)MOUSEEVENTF.RIGHTDOWN | (uint)MOUSEEVENTF.RIGHTUP, 0, 0, 0, 0);
+                    @event = (uint)MOUSEEVENTF.RIGHTDOWN;
                     break;
                 case "Middle":
-                    mouse_event((uint)MOUSEEVENTF.MIDDLEDOWN | (uint)MOUSEEVENTF.MIDDLEUP, 0, 0, 0, 0);
+                    @event = (uint)MOUSEEVENTF.MIDDLEDOWN;
                     break;
             }
+
+            if (@long)
+                mouse_event(@event, 0, 0, 0, 0);
+            else
+                mouse_event(@event | (@event * 2), 0, 0, 0, 0);
+        }
+
+        public static void UpClick(string button, bool useCustomCoords, int X, int Y)
+        {
+            if (useCustomCoords) { SetCursorPos(X, Y); }
+            
+            var @event = (uint)MOUSEEVENTF.LEFTDOWN;
+            switch (button)
+            {
+                case "Left":
+                    @event = (uint)MOUSEEVENTF.LEFTDOWN;
+                    break;
+                case "Right":
+                    @event = (uint)MOUSEEVENTF.RIGHTDOWN;
+                    break;
+                case "Middle":
+                    @event = (uint)MOUSEEVENTF.MIDDLEDOWN;
+                    break;
+            }
+
+            mouse_event(@event * 2, 0, 0, 0, 0);
         }
     }
 }
